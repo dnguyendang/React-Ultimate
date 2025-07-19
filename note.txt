@@ -1,0 +1,22 @@
+1. cài nodejs v20.14.0
+cài nvm để quản lý node version
+
+2. format code
+file/preferences/settings/format on save
+
+3. cài extension
+code spell checker
+auto complete tag
+
+4. setup
+clone dự án về
+cài thư viện npm i
+chạy dự án npm run dev
+cài thư viện router
+npm i --save-exact react-router-dom@6.23.1
+
+5. cài antd
+npm i --save-exact antd@5.18.1 @ant-design/icons@5.3.7
+
+6. cài axios
+npm i --save-exact axios@1.7.2
