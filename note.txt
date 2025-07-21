@@ -18,7 +18,7 @@ npm run dev
 npm i --save-exact react-router-dom@6.23.1
 
 # cài antd
-npm i --save-exact antd@5.18.1 @ant-design/icons@5.3.7
+npm i --save-exact antd@5.18.1 13/7 - 19/7
 
 # cài axios
 npm i --save-exact axios@1.7.2

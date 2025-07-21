@@ -1,9 +1,10 @@
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Space, Table, Tag } from 'antd';
+import { notification, Popconfirm, Space, Table } from 'antd';
 import UpdateUserModal from './update.user.modal';
 import { useState } from 'react';
 import ViewUserDetail from './view.user.detail';
+import { deleteUserAPI } from '../../services/api.service';
 
 const UserTable = (props) => {
 
@@ -14,6 +15,22 @@ const UserTable = (props) => {
 
     const [dataDetail, setDataDetail] = useState(null)
     const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+    const handleDeleteUser = async (id) => {
+        const res = await deleteUserAPI(id);
+        if (res.data) {
+            notification.success({
+                message: "delete user",
+                description: "Xóa user thành công"
+            })
+            await loadUser();
+        } else {
+            notification.error({
+                message: "Error delete user",
+                description: JSON.stringify(res.message)
+            })
+        }
+    }
 
     const columns = [
         {
@@ -54,9 +71,20 @@ const UserTable = (props) => {
                             setDataUpdate(record);
                         }}
                     />
-                    <DeleteOutlined
-                        style={{ cursor: "pointer", color: "red" }}
-                    />
+
+                    <Popconfirm
+                        title="Xóa người dùng"
+                        description="Bạn chắc chắn xóa người dùng này?"
+                        onConfirm={() => handleDeleteUser(record._id)}
+                        okText="Yes"
+                        cancelText="No"
+                        placement='left'
+                    >
+                        <DeleteOutlined
+                            style={{ cursor: "pointer", color: "red" }}
+                        />
+                    </Popconfirm>
+
                 </Space>
             ),
         },
