@@ -7,11 +7,9 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     const onFinish = async (values) => {
-        console.log(">>> check : ", values)
-
         //call api
         const res = await registerUserAPI(
-            values.fullName, 
+            values.fullName,
             values.email,
             values.password,
             values.phone
@@ -37,7 +35,7 @@ const RegisterPage = () => {
             onFinish={onFinish}
             style={{ margin: "30px" }}
         >
-            <h3 style={{textAlign:"center"}}>Đăng ký tài khoản</h3>
+            <h3 style={{ textAlign: "center" }}>Đăng ký tài khoản</h3>
             <Row justify={"center"}>
                 <Col xs={24} md={8}>
                     <Form.Item
@@ -122,10 +120,10 @@ const RegisterPage = () => {
                                 fullName: "DundND",
                                 phone: "0902046888"
                             })
-                            console.log("check form: ", form.getFieldsValue());
+                            console.log("check test form: ", form.getFieldsValue());
                         }}>Test</Button>
                     </div>
-                    <Divider/>
+                    <Divider />
                     <div>Dã có tài khoản? <Link to={"/login"}>Đăng nhập tại dây</Link></div>
                 </Col>
             </Row>
