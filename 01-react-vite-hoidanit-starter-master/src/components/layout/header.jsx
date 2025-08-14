@@ -1,6 +1,6 @@
 // import './header.css'
 import { Link, NavLink } from 'react-router-dom';
-import { UserOutlined, HomeOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
+import { UserOutlined, HomeOutlined, BookOutlined, SettingOutlined, LoginOutlined, AliwangwangOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -34,21 +34,26 @@ const Header = () => {
             key: 'books',
             icon: <BookOutlined />
         },
-        {
-            label: 'Cài đặt',
-            key: 'setting',
-            icon: <SettingOutlined />,
-            children: [
-                {
-                    label: <Link to={"/login"}>Đăng nhập</Link>,
-                    key: 'login',
-                },
-                {
-                    label: 'Đăng xuất',
-                    key: 'logout',
-                },
-            ],
-        }
+
+        ...(!user.id ? [
+            {
+                label: <Link to={"/login"}>Đăng nhấp</Link>,
+                key: 'login',
+                icon: <LoginOutlined />
+            }
+        ] : [
+            {
+                label: `Welcome ${user.fullName} `,
+                key: 'setting',
+                icon: <AliwangwangOutlined />,
+                children: [
+                    {
+                        label: 'Đăng xuất',
+                        key: 'logout',
+                    },
+                ],
+            }
+        ]),
     ];
 
     return (
