@@ -34,26 +34,21 @@ const Header = () => {
             key: 'books',
             icon: <BookOutlined />
         },
-
-        ...(!user.id ? [
-            {
-                label: <Link to={"/login"}>Đăng nhấp</Link>,
-                key: 'login',
-                icon: <LoginOutlined />
-            }
-        ] : [
-            {
-                label: `Welcome ${user.fullName} `,
-                key: 'setting',
-                icon: <AliwangwangOutlined />,
-                children: [
-                    {
-                        label: 'Đăng xuất',
-                        key: 'logout',
-                    },
-                ],
-            }
-        ]),
+        {
+            label: 'Cài đặt',
+            key: 'setting',
+            icon: <SettingOutlined />,
+            children: [
+                {
+                    label: <Link to={"/login"}>Đăng nhập</Link>,
+                    key: 'login',
+                },
+                {
+                    label: 'Đăng xuất',
+                    key: 'logout',
+                },
+            ],
+        }
     ];
 
     return (
