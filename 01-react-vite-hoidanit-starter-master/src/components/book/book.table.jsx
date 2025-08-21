@@ -1,12 +1,12 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Popconfirm, Space, Table } from "antd";
+import { notification, Popconfirm, Space, Table } from "antd";
 import { useState } from "react";
 import { deleteBookAPI } from "../../services/api.service";
-import ViewBookDetail from "./view.user.detail";
+import ViewBookDetail from "./view.book.detail";
 import UpdateBookModal from "./update.book.modal";
 
 const BookTable = (props) => {
-    const {dataBooks, loadBook, current, pageSize, total, setCurrent, setPageSize, setTotal} = props
+    const { dataBooks, loadBook, current, pageSize, total, setCurrent, setPageSize, setTotal } = props
 
     const [isModalUpdateBookOpen, setIsModalUpdateBookOpen] = useState(false)
     const [dataUpdateBook, setDataUpdateBook] = useState(null)
@@ -14,15 +14,21 @@ const BookTable = (props) => {
     const [isDetailBookOpen, setIsDetailBookOpen] = useState(false)
     const [dataDetailBook, setDataDetailBook] = useState(null)
 
-    const handleDeleteBook = async (id) =>{
+    const handleDeleteBook = async (id) => {
         const res = await deleteBookAPI(id);
-        if (res.data){
+        if (res.data) {
             notification.success({
-                message: "delete book", 
+                message: "delete book",
                 description: "Xóa book thành công"
             })
             await loadBook();
-        } else{
+            // Nếu sau khi xóa mà current page không còn record nào thì lùi về trang trước
+            if ((total - 1) <= (current - 1) * pageSize) {
+                setCurrent(current - 1 > 0 ? current - 1 : 1);
+            }
+
+            setTotal(total - 1); // cập nhật lại total
+        } else {
             notification.error({
                 message: "Error delete book",
                 description: JSON.stringify(res.message)
@@ -47,11 +53,11 @@ const BookTable = (props) => {
 
     const columns = [
         {
-            title: "STT", 
+            title: "STT",
             render: (_, record, index) => {
                 return (
                     <>
-                        {(index+1) + (current-1)*pageSize}
+                        {(index + 1) + (current - 1) * pageSize}
                     </>
                 )
             }
@@ -79,7 +85,12 @@ const BookTable = (props) => {
         {
             title: 'Giá tiền',
             dataIndex: 'price',
-        
+            render: (text, record, index, action) => {
+                if (text)
+                    return new Intl.NumberFormat('vi-VN',
+                        { style: 'currency', currency: 'VND' }).format(text)
+            }
+
         },
         {
             title: 'Số lượng',
@@ -95,24 +106,23 @@ const BookTable = (props) => {
             render: (_, record) => (
                 <Space size="middle">
                     <EditOutlined
-                        style={{cursor:"pointer", color:"orange"}}
-                        onClick={()=>{
+                        style={{ cursor: "pointer", color: "orange" }}
+                        onClick={() => {
                             setIsModalUpdateBookOpen(true);
                             setDataUpdateBook(record);
                         }}
                     />
-                
                     <Popconfirm
                         title="Xóa người dùng"
                         description="Bạn chắc chắn xóa người dùng này?"
-                        onConfirm={()=> handleDeleteBook(record._id)}
+                        onConfirm={() => handleDeleteBook(record._id)}
                         okText="Yes"
                         cancelText="No"
                         placement='left'
                     >
-                            <DeleteOutlined
-                                style={{ cursor: "pointer", color: "red" }}
-                            />
+                        <DeleteOutlined
+                            style={{ cursor: "pointer", color: "red" }}
+                        />
                     </Popconfirm>
                 </Space>
             ),
@@ -132,8 +142,8 @@ const BookTable = (props) => {
                         showSizeChanger: true,
                         total: total,
                         showTotal: (total, range) => {
-                            return(
-                                <div>{range[0]}-{range[1]} treen {total} rows</div>
+                            return (
+                                <div>{range[0]}-{range[1]} trên {total} rows</div>
                             )
                         }
                     }
@@ -145,7 +155,7 @@ const BookTable = (props) => {
                 setIsDetailBookOpen={setIsDetailBookOpen}
                 dataDetailBook={dataDetailBook}
                 setDataDetailBook={dataDetailBook}
-                loadBook={loadBook}    
+                loadBook={loadBook}
             />
             <UpdateBookModal
                 isModalUpdateBookOpen={isModalUpdateBookOpen}

@@ -79,9 +79,9 @@ const deleteBookAPI = (id) => {
     return axios.delete(URL_BACKEND)
 }
 
-const updateBookThumbnailAPI = (thumbnail, _id, mainText, author, price, quantity, category ) => {
+const updateBookThumbnailAPI = (thumbnail, _id, mainText, author, price, quantity, category) => {
     const URL_BACKEND = "/api/v1/book"
-    const data = {_id, thumbnail, mainText, author, price, quantity, category}
+    const data = { _id, thumbnail, mainText, author, price, quantity, category }
     return axios.put(URL_BACKEND, data)
 }
 
@@ -91,9 +91,9 @@ const updateBookAPI = (_id, mainText, author, price, quantity, category) => {
     return axios.put(URL_BACKEND, data)
 }
 
-const createBookAPI = (mainText, author, price, quantity, category) => {
+const createBookAPI = (thumbnail, mainText, author, price, quantity, category) => {
     const URL_BACKEND = "/api/v1/book"
-    const data = { mainText, author, price, quantity, category }
+    const data = { thumbnail, mainText, author, price, quantity, category }
     return axios.post(URL_BACKEND, data)
 }
 

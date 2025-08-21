@@ -19,9 +19,9 @@ const UpdateBookModal = (props) => {
     const [quantity, setQuantity] = useState("")
     const [category, setCategory] = useState("")
 
-    useEffect (() => {
-        if (dataUpdateBook){
-            setId(dataUpdateBook._id)
+    useEffect(() => {
+        if (dataUpdateBook) {
+            setId(dataUpdateBook.id)
             setMainText(dataUpdateBook.mainText)
             setAuthor(dataUpdateBook.author)
             setPrice(dataUpdateBook.price)
@@ -30,9 +30,9 @@ const UpdateBookModal = (props) => {
         }
     }, [dataUpdateBook])
 
-    const handleSubmitBtn = async() => {
-        const res = await updateBookAPI(_id, mainText, author, price, quantity, category)
-        if (res?.data){
+    const handleSubmitBtn = async () => {
+        const res = await updateBookAPI(id, mainText, author, price, quantity, category)
+        if (res?.data) {
             notification.success({
                 message: "update book",
                 description: "Cập nhật book thành công"
@@ -47,7 +47,7 @@ const UpdateBookModal = (props) => {
         }
     }
 
-    const resetAndCloseModal = ()=>{
+    const resetAndCloseModal = () => {
         setIsModalUpdateBookOpen(false)
         setMainText("")
         setAuthor("")
@@ -60,14 +60,14 @@ const UpdateBookModal = (props) => {
     return (
         <Modal
             title="Update book"
-            closable={{'aria-label':'Custom Close Button'}}
+            closable={{ 'aria-label': 'Custom Close Button' }}
             open={isModalUpdateBookOpen}
-            onOk={()=>handleSubmitBtn()}
-            onCancel={()=>resetAndCloseModal()}
+            onOk={() => handleSubmitBtn()}
+            onCancel={() => resetAndCloseModal()}
             maskClosable={false}
             okText={"Save"}
         >
-            <div style={{display:"flex", gap: "15px", flexDirection:"column"}}>
+            <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
                 <div>
                     <span>ID</span>
                     <Input
@@ -79,35 +79,35 @@ const UpdateBookModal = (props) => {
                     <span>Tiêu đề</span>
                     <Input
                         value={mainText}
-                        onChange={(event)=>{setMainText(event.target.value)}}
+                        onChange={(event) => { setMainText(event.target.value) }}
                     />
                 </div>
                 <div>
                     <span>Tác giả</span>
                     <Input
                         value={author}
-                        onChange={(event)=>{setAuthor(event.target.value)}}
+                        onChange={(event) => { setAuthor(event.target.value) }}
                     />
                 </div>
                 <div>
                     <span>Giá</span>
                     <Input
                         value={price}
-                        onChange={(event)=>{setPrice(event.target.value)}}
+                        onChange={(event) => { setPrice(event.target.value) }}
                     />
                 </div>
                 <div>
                     <span>Số lượng</span>
                     <Input
                         value={quantity}
-                        onChange={(event)=>{setQuantity(event.target.value)}}
+                        onChange={(event) => { setQuantity(event.target.value) }}
                     />
                 </div>
                 <div>
                     <span>Thể loại</span>
                     <Input
                         value={category}
-                        onChange={(event)=>{setCategory(event.target.value)}}
+                        onChange={(event) => { setCategory(event.target.value) }}
                     />
                 </div>
             </div>
