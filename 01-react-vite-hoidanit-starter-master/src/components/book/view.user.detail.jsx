@@ -1,95 +1,98 @@
-import React, { useState } from 'react';
-import { Button, Drawer, notification } from 'antd';
-import { handleUploadFile, updateUserAvatarAPI } from '../../services/api.service';
+import { Button, Drawer, notification } from "antd"
+import { handleUploadFile, updateBookThumbnailAPI } from "../../services/api.service"
+import { useState } from "react"
 
-const ViewUserDetail = (props) => {
 
-    const { isDetailOpen, setIsDetailOpen, dataDetail, loadUser } = props
+const ViewBookDetail = (props) =>{
+    const {isDetailBookOpen, setIsDetailBookOpen, dataDetailBook, setDataDetailBook, loadBook} = props
 
     const [selectedFile, setSelectedFile] = useState(null)
     const [preview, setPreview] = useState(null)
 
     const showDrawer = () => {
-        setIsDetailOpen(true);
-    };
+        setIsDetailBookOpen(true);
+    }
     const onClose = () => {
-        setIsDetailOpen(false);
-    };
+        setIsDetailBookOpen(false);
+    }
 
     const handleOnChangeFile = (event) => {
-        if (!event.target.files || event.target.files.length == 0) {
+        if (!event.target.files || event.target.files.length == 0){
             setSelectedFile(null)
             setPreview(null)
             return
         }
         const file = event.target.files[0]
-        if (file) {
+        if (file){
             setSelectedFile(file)
             setPreview(URL.createObjectURL(file))
         }
     }
 
-    const handleUpdateUserAvatar = async () => {
-        const resUpload = await handleUploadFile(selectedFile, "avatar")
+    const handleUpdateBookThumbnail = async () => {
+        const resUpload = await handleUploadFile(selectedFile, "book")
 
-        if (resUpload.data) {
-            const newAvatar = resUpload.data.fileUploaded
-            const resUpdateAvatar = await updateUserAvatarAPI(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone)
-
+        if (resUpload.data){
+            const newThumbnail = resUpload.data.fileUploaded
+            const resUpdateAvatar = await updateBookThumbnailAPI(newThumbnail, dataDetailBook._id, dataDetailBook.mainText, dataDetailBook.author, 
+                                                                dataDetailBook.price, dataDetailBook.quantity, dataDetailBook.category)
+                                                                
             if (resUpdateAvatar.data) {
-                setIsDetailOpen(false)
+                setIsDetailBookOpen(false);
                 setSelectedFile(null);
                 setPreview(null);
-                loadUser();
+                loadBook();
 
                 notification.success({
-                    message: "update user avatar",
-                    description: "Cập nhật avatar thành công"
+                    message: "update book thumbnails",
+                    description: "Cập nhật thumbnail thành công"
                 })
             } else {
                 notification.error({
-                    message: "Error update avatar",
-                    description: JSON.stringify(resUpdateAvatar.message)
+                    message: "Error update thumbnail",
+                    description: JSON.stringify(resUpdate)
                 })
             }
         } else {
             notification.error({
-                message: "Error upload file",
+                message: "Error update file",
                 description: JSON.stringify(resUpload.message)
             })
         }
     }
-
     return (
         <>
             <Button type="primary" onClick={showDrawer}>
                 Open
             </Button>
             <Drawer
-                // width={"40vw"}
-                title="Chi tiết người dùng"
-                closable={{ 'aria-label': 'Close Button' }}
+                title="Chi tiết sách"
+                closable={{'aria-label': 'Close Button'}}
                 onClose={onClose}
-                open={isDetailOpen}
+                open={isDetailBookOpen}
             >
-                {dataDetail ?
+                {dataDetailBook ?
                     <>
-                        <p>ID: {dataDetail._id}</p>
+                        <p>ID: {dataDetailBook._id}</p>
                         <br />
-                        <p>Full Name: {dataDetail.fullName}</p>
+                        <p>Tiêu đề: {dataDetailBook.mainText}</p>
                         <br />
-                        <p>Email: {dataDetail.email}</p>
+                        <p>Tác giả: {dataDetailBook.author}</p>
                         <br />
-                        <p>Phone Number: {dataDetail.phone}</p>
+                        <p>Giá: {dataDetailBook.price}</p>
                         <br />
-                        <p>Avatar: </p>
+                        <p>Số lượng: {dataDetailBook.quantity}</p>
+                        <br />
+                        <p>Thể loại: {dataDetailBook.category}</p>
+                        <br />
+                        <p>Thumbnail: </p>
                         <div style={{
                             marginTop: "10px",
-                            height: "100px", width: "150px",
+                            height: "200px", width: "200px",
                             border: "1px solid #ccc"
                         }}>
                             <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
-                                src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataDetail.avatar}`} />
+                                src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDetailBook.thumbnail}`} />
                         </div>
                         <div>
                             <label htmlFor='btnUpload' style={{
@@ -101,7 +104,7 @@ const ViewUserDetail = (props) => {
                                 borderRadius: "5px",
                                 cursor: "pointer"
                             }}>
-                                Upload Avatar
+                                Upload Thumbnail
                             </label>
                             <input
                                 onChange={(event) => handleOnChangeFile(event)}
@@ -112,14 +115,14 @@ const ViewUserDetail = (props) => {
                                 <div style={{
                                     marginTop: "10px",
                                     marginBottom: "15px",
-                                    height: "100px", width: "150px",
+                                    height: "200px", width: "200px",
 
                                 }}>
                                     <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
                                         src={preview} />
                                 </div>
                                 <Button
-                                    onClick={() => handleUpdateUserAvatar()}
+                                    onClick={() => handleUpdateBookThumbnail()}
                                     type='primary'
                                 >Lưu</Button>
                             </>
@@ -130,12 +133,9 @@ const ViewUserDetail = (props) => {
                         <p>Không có dữ liệu</p>
                     </>
                 }
-
             </Drawer>
         </>
-
     )
 }
 
-
-export default ViewUserDetail;
+export default ViewBookDetail;

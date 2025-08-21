@@ -54,7 +54,7 @@ const loginAPI = (email, password) => {
     const data = {
         username: email,
         password: password,
-        delay: 1000
+        delay: 100
     }
     return axios.post(URL_BACKEND, data)
 }
@@ -62,6 +62,39 @@ const loginAPI = (email, password) => {
 const getAccountAPI = () => {
     const URL_BACKEND = "/api/v1/auth/account"
     return axios.get(URL_BACKEND)
+}
+
+const logoutAPI = () => {
+    const URL_BACKEND = "/api/v1/auth/logout"
+    return axios.post(URL_BACKEND)
+}
+
+const getfetchAllBookAPI = (current, pageSize) => {
+    const URL_BACKEND = `/api/v1/book?current=${current}&pageSize=${pageSize}`;
+    return axios.get(URL_BACKEND);
+}
+
+const deleteBookAPI = (id) => {
+    const URL_BACKEND = `/api/v1/book/${id}`
+    return axios.delete(URL_BACKEND)
+}
+
+const updateBookThumbnailAPI = (thumbnail, _id, mainText, author, price, quantity, category ) => {
+    const URL_BACKEND = "/api/v1/book"
+    const data = {_id, thumbnail, mainText, author, price, quantity, category}
+    return axios.put(URL_BACKEND, data)
+}
+
+const updateBookAPI = (_id, mainText, author, price, quantity, category) => {
+    const URL_BACKEND = `/api/v1/book`
+    const data = { _id, mainText, author, price, quantity, category }
+    return axios.put(URL_BACKEND, data)
+}
+
+const createBookAPI = (mainText, author, price, quantity, category) => {
+    const URL_BACKEND = "/api/v1/book"
+    const data = { mainText, author, price, quantity, category }
+    return axios.post(URL_BACKEND, data)
 }
 
 export {
@@ -74,5 +107,10 @@ export {
     registerUserAPI,
     loginAPI,
     getAccountAPI,
-
+    logoutAPI,
+    getfetchAllBookAPI,
+    deleteBookAPI,
+    updateBookThumbnailAPI,
+    updateBookAPI,
+    createBookAPI,
 }

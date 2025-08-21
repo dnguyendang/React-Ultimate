@@ -1,22 +1,42 @@
 // import './header.css'
-import { Link, NavLink } from 'react-router-dom';
-import { UserOutlined, HomeOutlined, BookOutlined, SettingOutlined, LoginOutlined, AliwangwangOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { UserOutlined, HomeOutlined, AuditOutlined, SettingOutlined, LoginOutlined, AliwangwangOutlined } from '@ant-design/icons';
+import { Menu, message } from 'antd';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
+import { logoutAPI } from '../../services/api.service';
 
 
 const Header = () => {
 
     const [current, setCurrent] = useState('');
-
-    const { user } = useContext(AuthContext);
-
-    console.log(">>>> check user ", user);
+    const { user, setUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const onClick = e => {
         setCurrent(e.key);
     };
+
+    const handleLogout = async () => {
+        const res = await logoutAPI();
+
+        if (res.data) {
+            // clear data
+            localStorage.removeItem("access_token");
+            setUser({
+                id: "",
+                email: "",
+                phone: "",
+                fullName: "",
+                role: "",
+                avatar: ""
+            })
+            message.success("Logout thành công.");
+            
+            // redirect to home
+            navigate("/")
+        }
+    }
 
     const items = [
         {
@@ -32,23 +52,23 @@ const Header = () => {
         {
             label: <Link to="/books">Books</Link>,
             key: 'books',
-            icon: <BookOutlined />
+            icon: <AuditOutlined />
         },
-        {
-            label: 'Cài đặt',
+        ...(!user.id ? [{
+            label: <Link to={"/login"}>Đăng nhập</Link>,
+            key:'login',
+            icon:<LoginOutlined/>
+        }]:[{
+            label: `Welcome ${user.fullName}`,
             key: 'setting',
-            icon: <SettingOutlined />,
-            children: [
+            icon:<AliwangwangOutlined/>,
+            children:[
                 {
-                    label: <Link to={"/login"}>Đăng nhập</Link>,
-                    key: 'login',
-                },
-                {
-                    label: 'Đăng xuất',
+                    label: <span onClick={()=> handleLogout()}>Đăng xuất</span>,
                     key: 'logout',
-                },
+                }
             ],
-        }
+        }]),
     ];
 
     return (
