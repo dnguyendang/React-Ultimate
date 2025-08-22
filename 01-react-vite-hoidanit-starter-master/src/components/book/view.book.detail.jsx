@@ -81,7 +81,7 @@ const ViewBookDetail = (props) => {
                         <br />
                         <p>Thể loại: {dataDetailBook.category}</p>
                         <br />
-                        <p>Giá: {dataDetailBook.price}</p>
+                        <p>Giá tiền: {new Intl.NumberFormat('vi-VN',{ style: 'currency', currency: 'VND' }).format(dataDetailBook.price)}</p>
                         <br />
                         <p>Số lượng: {dataDetailBook.quantity}</p>
                         <br />

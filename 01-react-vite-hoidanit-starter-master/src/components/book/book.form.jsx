@@ -1,4 +1,4 @@
-import { Button, Input, Modal, notification } from "antd"
+import { Button, Input, InputNumber, Modal, notification, Select } from "antd"
 import { useState } from "react"
 import { createBookAPI, handleUploadFile } from "../../services/api.service"
 
@@ -6,8 +6,8 @@ import { createBookAPI, handleUploadFile } from "../../services/api.service"
 const BookForm = (props) => {
     const [mainText, setMainText] = useState("")
     const [author, setAuthor] = useState("")
-    const [price, setPrice] = useState(0)
-    const [quantity, setQuantity] = useState(0)
+    const [price, setPrice] = useState("")
+    const [quantity, setQuantity] = useState("")
     const [category, setCategory] = useState("")
     const [isModalBookOpen, setIsModalBookOpen] = useState(false)
     const { loadBook } = props
@@ -28,6 +28,14 @@ const BookForm = (props) => {
     }
 
     const handleSubmitBtn = async () => {
+        if (!selectedFile){
+            notification.error({
+                message: "Error create book",
+                description: "Vui lòng upload ảnh thumbnail"
+            })
+            return;
+        }
+
         const resUpload = await handleUploadFile(selectedFile, "book")
         if (resUpload.data) {
             const thumbnail = resUpload.data.fileUploaded
@@ -47,7 +55,8 @@ const BookForm = (props) => {
             }
         } else {
             notification.error({
-                message: "Error upload file"
+                message: "Error upload file",
+                description: JSON.stringify(resUpload.message)
             })
         }
     }
@@ -56,8 +65,8 @@ const BookForm = (props) => {
         setIsModalBookOpen(false)
         setMainText("")
         setAuthor("")
-        setPrice(0)
-        setQuantity(0)
+        setPrice("")
+        setQuantity("")
         setCategory("")
         setSelectedFile(null);
         setPreview(null);
@@ -98,28 +107,42 @@ const BookForm = (props) => {
                         />
                     </div>
                     <div>
-                        <span>Giá</span>
-                        <Input
+                        <span>Giá tiền</span>
+                        <InputNumber
+                            style={{width: "100%"}}
+                            addonAfter={' đ'}
                             value={price}
-                            onChange={(event) => {
-                                setPrice(+event.target.value)
-                            }}
+                            onChange={(event) => {setPrice(event)}}
                         />
                     </div>
                     <div>
                         <span>Số lượng</span>
-                        <Input
+                        <InputNumber
+                            style={{width: "100%"}}
                             value={quantity}
                             onChange={(event) => {
-                                setQuantity(+event.target.value)
+                                setQuantity(event)
                             }}
                         />
                     </div>
                     <div>
                         <span>Thể loại</span>
-                        <Input
+                        <Select
+                            style={{width: "100%"}}
                             value={category}
-                            onChange={(event) => { setCategory(event.target.value) }}
+                            onChange={(value) => { setCategory(value) }}
+                            options={[
+                                {value: 'Arts', label: 'Arts'},
+                                {value: 'Business', label: 'Business'},
+                                {value: 'Comics', label: 'Comics'},
+                                {value: 'Cooking', label: 'Cooking'},
+                                {value: 'Entertainment', label: 'Entertainment'},
+                                {value: 'History', label: 'History'},
+                                {value: 'Music', label: 'Music'},
+                                {value: 'Sports', label: 'Sports'},
+                                {value: 'Teen', label: 'Teen'},
+                                {value: 'Travel', label: 'Travel'},
+                            ]}
                         />
                     </div>
                     {preview &&
@@ -148,6 +171,7 @@ const BookForm = (props) => {
                         </label>
                         <input
                             onChange={(event) => handleOnChangeFile(event)}
+                            onClick={(event) => event.target.value = null}
                             type='file' hidden id='btnUpload' />
                     </div>
                 </div>

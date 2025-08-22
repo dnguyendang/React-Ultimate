@@ -4,6 +4,7 @@ import { useState } from "react";
 import { deleteBookAPI } from "../../services/api.service";
 import ViewBookDetail from "./view.book.detail";
 import UpdateBookModal from "./update.book.modal";
+import UpdateBookModalUncontrol from "./update.book.modal.uncontrolled.component";
 
 const BookTable = (props) => {
     const { dataBooks, loadBook, current, pageSize, total, setCurrent, setPageSize, setTotal } = props
@@ -157,7 +158,14 @@ const BookTable = (props) => {
                 setDataDetailBook={dataDetailBook}
                 loadBook={loadBook}
             />
-            <UpdateBookModal
+            {/* <UpdateBookModal
+                isModalUpdateBookOpen={isModalUpdateBookOpen}
+                setIsModalUpdateBookOpen={setIsModalUpdateBookOpen}
+                dataUpdateBook={dataUpdateBook}
+                setDataUpdateBook={setDataUpdateBook}
+                loadBook={loadBook}
+            /> */}
+            <UpdateBookModalUncontrol
                 isModalUpdateBookOpen={isModalUpdateBookOpen}
                 setIsModalUpdateBookOpen={setIsModalUpdateBookOpen}
                 dataUpdateBook={dataUpdateBook}

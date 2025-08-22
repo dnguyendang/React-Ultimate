@@ -85,9 +85,9 @@ const updateBookThumbnailAPI = (thumbnail, _id, mainText, author, price, quantit
     return axios.put(URL_BACKEND, data)
 }
 
-const updateBookAPI = (_id, mainText, author, price, quantity, category) => {
+const updateBookAPI = (_id, newThumbnail, mainText, author, price, quantity, category) => {
     const URL_BACKEND = `/api/v1/book`
-    const data = { _id, mainText, author, price, quantity, category }
+    const data = { _id, newThumbnail, mainText, author, price, quantity, category }
     return axios.put(URL_BACKEND, data)
 }
 
